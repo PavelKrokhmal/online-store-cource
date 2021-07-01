@@ -3,9 +3,10 @@ import {Switch, Route, Redirect} from 'react-router-dom'
 import { Context } from '..'
 import { authRoutes, publicRoutes } from '../routes'
 import { SHOP_ROUTE } from '../utils/consts'
+import {observer} from 'mobx-react-lite'
 
 function AppRouter() {
-    const user = useContext(Context)
+    const {user} = useContext(Context)
     return (
         <div>
             <Switch>
@@ -26,4 +27,4 @@ function AppRouter() {
     )
 }
 
-export default AppRouter
+export default observer(AppRouter)
