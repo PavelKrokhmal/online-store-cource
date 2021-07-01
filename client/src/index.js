@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import {BrowserRouter} from 'react-router-dom'
-import AppRouter from './components/AppRouter'
+import DeviceStore from './store/DeviceStore';
+import UserStore from './store/UserStore';
+
+export const Context = createContext(null)
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <AppRouter /> 
-    </BrowserRouter>
+      <Context.Provider value={{
+        user: new UserStore(),
+        device: new DeviceStore()
+      }}>
+        <App /> 
+      </Context.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
