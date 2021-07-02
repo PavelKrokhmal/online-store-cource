@@ -9,6 +9,11 @@ import {useHistory} from 'react-router-dom'
 function NavBar() {
     const {user} = useContext(Context)
     const history = useHistory() 
+    const logOut = () => {
+        user.setUser({})
+        user.setIsAuth(false)
+        localStorage.removeItem('token')
+    }
 
     return (
         <Navbar bg="dark" variant="dark">
@@ -22,12 +27,12 @@ function NavBar() {
                             }}
                         >Admin</Button>
                         <Button variant="outline-light" className="ml-2"
-                            onClick={()=> {history.push(LOGIN_ROUTE)}}
+                            onClick={logOut}
                         >Log out</Button>
                     </Nav>
                     :
                     <Nav className="ml-auto" style={{color: "white"}}>              
-                        <Button variant="outline-light" onClick={() => user.setIsAuth(true)}>Authorization</Button>
+                        <Button variant="outline-light" onClick={() => history.push(LOGIN_ROUTE)}>Authorization</Button>
                     </Nav>
                 }
             </Container>

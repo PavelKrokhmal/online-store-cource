@@ -1,11 +1,36 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import {Container, Form, Card, Button, Row} from 'react-bootstrap'
-import {NavLink, useLocation} from 'react-router-dom'
-import { LOGIN_ROUTE, REGISTRATION_ROUTE } from '../utils/consts'
+import {NavLink, useHistory, useLocation} from 'react-router-dom'
+import { login, registration } from '../http/userApi'
+import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from '../utils/consts'
+import {observer} from 'mobx-react-lite'
+import {Context} from '../index'
 
 function Auth() {
+    const {user} = useContext(Context)
     const location = useLocation()
+    const history = useHistory()
     const isLogin = location.pathname === LOGIN_ROUTE
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const click = async () => {
+        try {
+            let data
+            if (isLogin) {
+                data = await login(email, password)
+            } else {
+                data = await registration(email, password)
+            }
+            console.log(data) 
+            user.setUser(data)
+            user.setIsAuth(true)
+            history.push(SHOP_ROUTE)
+        } catch (e) {
+            alert(e.response.data.message)
+        }
+    }
 
     return (
         <Container className="d-flex justify-content-center align-items-center"
@@ -15,9 +40,13 @@ function Auth() {
                 <Form className="d-flex flex-column">
                     <Form.Control placeholder="Input your email..."
                         type="email" 
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
                         className="mt-4"/>
                     <Form.Control placeholder="Input your password..." 
                         type="password"
+                        onChange={(event) => setPassword(event.target.value)}
+                        value={password}
                         className="mt-2"/>
                     <Row className="d-flex justify-content-between mt-4 pl-3 pr-3">
                         {isLogin ? 
@@ -29,7 +58,7 @@ function Auth() {
                                 Have account? <NavLink to={LOGIN_ROUTE}>Log in</NavLink>
                             </div>
                         }
-                        <Button variant={"outline-success"}>
+                        <Button variant={"outline-success"} onClick={click}>
                            {isLogin ? "Log in" : "Registration"}
                         </Button>
                     </Row>
@@ -40,4 +69,4 @@ function Auth() {
     )
 }
 
-export default Auth
+export default observer(Auth)
