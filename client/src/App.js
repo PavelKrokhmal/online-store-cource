@@ -17,11 +17,6 @@ function App() {
         user.setUser(data)
         user.setIsAuth(true)
       })
-      .catch(err => {
-        user.setUser({})
-        user.setIsAuth(false)
-        setLoading(false)
-      })
       .finally(() => {
         setLoading(false)
       })
