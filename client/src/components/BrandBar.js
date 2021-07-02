@@ -5,6 +5,7 @@ import {Row, Card} from 'react-bootstrap'
 
 function BrandBar() {
     const {device} = useContext(Context)
+
     return (
         <Row className="d-flex">
             {device.brands.map((brand) => 
